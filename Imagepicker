@@ -1,0 +1,23 @@
+//ON CLICK PIC SELECT//
+Intent i1 = new Intent();
+i1.setType("image/*");        
+i1.setAction(Intent.ACTION_GET_CONTENT);                    
+startActivityForResult(Intent.createChooser(i1, "Select Picture"),SELECT_PICTURE);
+break;
+
+//onActivityResult//
+if (resultCode == RESULT_OK) {
+  try {
+    final Uri imageUri = data.getData();
+    final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+    imageView.setImageBitmap(selectedImage);
+    } 
+  catch (FileNotFoundException e) {
+    e.printStackTrace();
+    Toast.makeText(TherapyActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+    }
+} 
+else {
+   Toast.makeText(TherapyActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+}
