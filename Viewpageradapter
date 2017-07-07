@@ -1,0 +1,119 @@
+package edu.np.ece.remquiz;
+
+import android.content.Context;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+/**
+ * Created by 10151546F on 03/07/2017.
+ */
+
+public class ViewPagerAdapter extends PagerAdapter {
+
+    ImageView imageView;
+    Button btCorrect, btWrong;
+    TextView tvDescription, tvQuiz;
+
+    String QuizAns = "";
+    String Op = "";
+
+
+    private Context context;
+    private LayoutInflater layoutInflater;
+
+    private Integer [] images = {R.drawable.busticket, R.drawable.clarkequay, R.drawable.iron};
+    private String [] D = {"Bus Ticket ", "Clark Quay", "Iron"};
+    private String [] Quiz = {"What is this?", "Where is this?", "What is this?"};
+    private String [] Ans = {"Bus Ticket", "Clark Quay", "Iron"};
+    private String [] option = {"Cinema Ticket", "Chinatown", "Stamp"};
+
+
+    View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btCorrect:
+                    Toast toast1 = Toast.makeText(context, "Well Done!", Toast.LENGTH_SHORT);
+                    toast1.setGravity(Gravity.CENTER,0,0);
+                    toast1.show();
+                    break;
+                case R.id.btWrong:
+                    Toast toast2 = Toast.makeText(context, "Good Try. Try Again.", Toast.LENGTH_SHORT);
+                    toast2.setGravity(Gravity.CENTER,0,0);
+                    toast2.show();
+                    break;
+            }
+        }
+    };
+
+
+    public ViewPagerAdapter(Context context){
+
+        this.context = context;
+    }
+
+
+    @Override
+    public int getCount() {
+        return images.length;
+    }
+
+    @Override
+    public boolean isViewFromObject(View view, Object object) {
+        return view == object;
+    }
+
+
+
+    public Object instantiateItem (ViewGroup container, int position){
+
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.for_swipe_action, null);
+
+        imageView = (ImageView) view.findViewById(R.id.imageView);
+        imageView.setImageResource(images[position]);
+
+        tvDescription = (TextView) view.findViewById(R.id.tvDescription);
+        tvDescription.setText(D[position]);
+
+        tvQuiz = (TextView) view.findViewById(R.id.tvQuiz);
+        tvQuiz.setText(Quiz[position]);
+
+        btCorrect = (Button) view.findViewById(R.id.btCorrect);
+        QuizAns = Ans[position];
+
+        btCorrect.setText(QuizAns);
+        btCorrect.setOnClickListener(listener);
+
+
+        btWrong = (Button) view.findViewById(R.id.btWrong);
+        Op = option[position];
+        btWrong.setText(Op);
+        btWrong.setOnClickListener(listener);
+
+        ViewPager vp = (ViewPager) container;
+        vp.addView(view, 0);
+        return view;
+    }
+
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+      //  super.destroyItem(container, position, object);
+        ViewPager vp = (ViewPager) container;
+        View view = (View) object;
+        vp.removeView(view);
+    }
+
+}
+
+
+
